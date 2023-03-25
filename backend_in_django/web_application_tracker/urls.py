@@ -20,5 +20,6 @@ from web_application_tracker import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('healthcheck/', views.HealthCheck.as_view(), name='healthcheck'),
+    path('populate_db/', views.PopulateDatabaseWithDummyData.as_view(), name='populate_db'),
     path('product/', include('product.urls')),
 ]

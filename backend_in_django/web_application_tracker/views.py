@@ -9,12 +9,13 @@ from product.models import Product
 from datetime import datetime
 
 from product.models import Product #check syntax
+import random #used to generate random numbers
 
 class PopulateDatabaseWithDummyData(APIView):
     """
     PopulateDatabaseWithDummyData
     """
-    def get(self, request, id):
+    def get(self, request):
 
         #creating placeholder personas to randomly insert into newly created product object
         product_names = ["Initiative","Project","Enterprise","Solution"]
@@ -29,15 +30,18 @@ class PopulateDatabaseWithDummyData(APIView):
 
             #TODO : Currently the developer list required is simplified to just -one- developer name. Must find a way around this
             product_data = {
-                "product_name" : product_names[randint(len(products_name))] + str(i),
-                "product_owner_name" : product_names[randint(len(product_owners))],
-                "developer_name" : product_names[randint(len(developers))],
-                "scrum_master_name" : product_names[randint(len(scrum_masters))],
-                "start_date" : datetime.now,
-                "methodology" : product_names[randint(len(methodologies))]
+                "product_name" : product_names[random.randint(0,len(product_names)-1)] + str(i),
+                "product_owner_name" : product_owners[random.randint(0,len(product_owners)-1)],
+                "developer_name" : developers[random.randint(0,len(developers)-1)],
+                "scrum_master_name" : scrum_masters[random.randint(0,len(scrum_masters)-1)],
+                "start_date" : datetime.now(),
+                "methodology" : methodologies[random.randint(0,len(methodologies)-1)]
             }
 
+            print("product data to insert into db : ", product_data)
+
             serializer = ProductSerializer(data=product_data)
+            serializer.is_valid(raise_exception=True)
             serializer.save() #this should insert the product into the database, to verify run /product/
 
         return Response({"Status":"Completed Execution of PopulateDatabaseWithDummyData"})
